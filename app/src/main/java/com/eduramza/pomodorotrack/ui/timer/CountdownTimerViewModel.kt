@@ -4,12 +4,16 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eduramza.pomodorotrack.R
 import com.eduramza.pomodorotrack.domain.entity.PomodoroCycle
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class CountdownTimerViewModel: ViewModel() {
 
@@ -24,6 +28,7 @@ class CountdownTimerViewModel: ViewModel() {
     private var runnable: Runnable? = null
 
     private var unlockedManually = false
+    val showSnackbar = mutableStateOf(false)
 
     fun controlCountdownTimer(context: Context) {
         if (_state.value.timerRunning) {
@@ -118,6 +123,31 @@ class CountdownTimerViewModel: ViewModel() {
             controlButton = ControlButton("Start", R.drawable.ic_play_arrow)
         )
     }
+
+    //region -lock unlock Snackbar
+    val snackbarTimeout = 5000L  // 1000L = 1s
+    fun handleScreenTap() {
+        if (_state.value.isLockedScreen) {
+            showSnackbar.value = true
+        }
+    }
+
+    fun dismissSnackbar() {
+        showSnackbar.value = false
+    }
+
+    fun exitFocusMode() {
+        unlockScreen()
+        dismissSnackbar()
+    }
+
+    fun startSnackbarTimer() {
+        viewModelScope.launch {
+            delay(snackbarTimeout)
+            dismissSnackbar()
+        }
+    }
+    //endregion
 
     override fun onCleared() {
         super.onCleared()

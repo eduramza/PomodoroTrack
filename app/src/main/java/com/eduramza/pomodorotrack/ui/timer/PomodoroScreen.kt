@@ -21,19 +21,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.eduramza.pomodorotrack.R
 import com.eduramza.pomodorotrack.ui.components.PomodoroTimerProgress
 
@@ -42,11 +44,8 @@ fun PomodoroScreen(
     viewModel: CountdownTimerViewModel,
     activity: Activity
 ) {
-    val isLocked = remember { mutableStateOf(false) }
-    val state = viewModel.state.collectAsState().value
-    val buttonConfig = state.controlButton
-
-    isLocked.value = state.isLockedScreen
+    val isLocked = viewModel.state.collectAsState().value.isLockedScreen
+    val showSnackbar = viewModel.showSnackbar.value
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -59,16 +58,16 @@ fun PomodoroScreen(
 
             // Espaçamento entre o progresso e a contagem de pomodoros
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Pomodoros Completos #${state.pomodoroCounter}")
+            Text(text = "Pomodoros Completos #${viewModel.state.collectAsState().value.pomodoroCounter}")
 
             // Espaçamento entre a contagem de pomodoros e os botões
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botões de controle
-            PomodoroControlButtons(viewModel, buttonConfig, state, activity.applicationContext)
+            PomodoroControlButtons(viewModel, activity.applicationContext)
 
         }
-        if (isLocked.value) {
+        if (isLocked) {
             // Bloqueador transparente
             Box(
                 modifier = Modifier
@@ -76,17 +75,45 @@ fun PomodoroScreen(
                     .background(Color.Transparent)
                     .pointerInput(Unit) {
                         detectTapGestures {
-                            //show toast
-
+                            viewModel.handleScreenTap()
                         }
                     }
             )
-            UnlockScreenContent(viewModel, isLocked)
+        }
+
+        if (showSnackbar) {
+            LaunchedEffect(key1 = showSnackbar) {
+                viewModel.startSnackbarTimer()
+            }
+
+            Snackbar(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp),
+                action = {
+                    TextButton(onClick = { viewModel.exitFocusMode() }) {
+                        Text(
+                            text = "Sair",
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            ) {
+                Text(
+                    text = "Deseja realmente sair do modo foco?",
+                    modifier = Modifier.padding(8.dp),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
         }
     }
 
-    LaunchedEffect(isLocked.value) {
-        if (isLocked.value) {
+    LaunchedEffect(isLocked) {
+        if (isLocked) {
             activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -128,18 +155,16 @@ private fun UnlockScreenContent(
 @Composable
 private fun PomodoroControlButtons(
     viewModel: CountdownTimerViewModel,
-    buttonConfig: ControlButton,
-    state: PomodoroUIState,
     context: Context
 ) {
-    val isRunning = state.timerRunning
+    val pomodoroState = viewModel.state.collectAsState().value
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (isRunning) {
+        if (pomodoroState.timerRunning) {
             Button(
                 onClick = viewModel::resetTimer,
                 shape = CircleShape,
@@ -164,13 +189,13 @@ private fun PomodoroControlButtons(
             modifier = Modifier.size(100.dp)
         ) {
             Icon(
-                painter = painterResource(id = buttonConfig.icon),
-                contentDescription = state.controlButton.contentDescription,
+                painter = painterResource(id = pomodoroState.controlButton.icon),
+                contentDescription = pomodoroState.controlButton.contentDescription,
                 modifier = Modifier.size(32.dp)
             )
         }
 
-        if (isRunning) {
+        if (pomodoroState.timerRunning) {
             Button(
                 onClick = viewModel::setNextCycle,
                 shape = CircleShape,
