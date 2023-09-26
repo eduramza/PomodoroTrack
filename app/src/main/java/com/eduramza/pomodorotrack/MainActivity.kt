@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.eduramza.pomodorotrack.ui.theme.AppTheme
 import com.eduramza.pomodorotrack.ui.theme.PomodoroAppTheme
 import com.eduramza.pomodorotrack.ui.timer.CountdownTimerViewModel
 import com.eduramza.pomodorotrack.ui.timer.PomodoroScreen
@@ -21,10 +20,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            PomodoroAppTheme(pomodoroCycle = viewModel.state.collectAsState().value.pomodoroCycle){
+            PomodoroAppTheme(pomodoroCycle = viewModel.state.collectAsState().value.pomodoroCycle) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()){
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     PomodoroScreen(viewModel = viewModel, this@MainActivity)
                 }
             }
