@@ -22,9 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import com.eduramza.pomodorotrack.R
+import com.eduramza.pomodorotrack.domain.entity.PomodoroCycle
 import com.eduramza.pomodorotrack.ui.components.PomodoroControlButtons
 import com.eduramza.pomodorotrack.ui.components.PomodoroTimerProgress
 
@@ -42,13 +46,26 @@ fun PomodoroScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Text(
+                text = activity.getString(getCycleTitle(viewModel.state.collectAsState().value.pomodoroCycle)),
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
             // Exibir o progresso do timer
             PomodoroTimerProgress(viewModel = viewModel)
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "Pomodoros Completos #${viewModel.state.collectAsState().value.pomodoroCounter}",
+                text = activity.getString(
+                    R.string.pomodoro_counter_info,
+                    viewModel.state.collectAsState().value.pomodoroCounter.toString()
+                ),
                 color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 14.sp,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -83,7 +100,7 @@ fun PomodoroScreen(
                 action = {
                     TextButton(onClick = { viewModel.exitFocusMode() }) {
                         Text(
-                            text = "Sair",
+                            text = stringResource(R.string.exit_focus_mode),
                             modifier = Modifier.padding(8.dp),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -92,7 +109,7 @@ fun PomodoroScreen(
                 }
             ) {
                 Text(
-                    text = "Deseja realmente sair do modo foco?",
+                    text = stringResource(R.string.want_exit_focus_mode_question),
                     modifier = Modifier.padding(8.dp),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
@@ -108,5 +125,13 @@ fun PomodoroScreen(
         } else {
             activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
+    }
+}
+
+private fun getCycleTitle(cycle: PomodoroCycle): Int {
+    return when (cycle) {
+        PomodoroCycle.Pomodoro -> R.string.pomodoro_cycle_title
+        PomodoroCycle.ShortBreak -> R.string.short_break_cycle_title
+        PomodoroCycle.LongBreak -> R.string.long_break_cycle_title
     }
 }

@@ -1,15 +1,23 @@
+# Arquivos compilados
+*.class
+*.apk
+*.ap_
+
+# Diretórios gerados
+bin/
+gen/
+out/
+build/
+.gradle/
+
+# Arquivos de configuração do Android Studio
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
 local.properties
+
+# Diretórios de logs
+*.log
+
+# Outros
+.DS_Store
+

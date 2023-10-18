@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PomodoroTrack</string>
+    <string name="pomodoro">Pomodoro</string>
+    <string name="short_break">Pausa</string>
+    <string name="long_break">Descanço</string>
+
+    <string name="pomodoro_cycle_title">Hora de Ficar Focado!</string>
+    <string name="short_break_cycle_title">Faça uma pausa!</string>
+    <string name="long_break_cycle_title">Hora de Descanse!</string>
+
+    <string name="pomodoro_counter_info">Pomodoros completos #%s</string>
+    <string name="want_exit_focus_mode_question">Deseja realmente sair do modo foco?</string>
+    <string name="exit_focus_mode">Sair</string>
+</resources>
