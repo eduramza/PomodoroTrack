@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -18,8 +20,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.eduramza.pomodorotrack.domain.entity.PomodoroCycle
 import com.eduramza.pomodorotrack.ui.timer.CountdownTimerViewModel
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 @Composable
@@ -35,15 +39,35 @@ fun PomodoroTimerProgress(
     val timeRemaining = state.timerRemaining.toFloat()
     val percentage = 1f - (timeRemaining / totalTime)
 
-    val color = MaterialTheme.colorScheme.primary
+    val colorPrimary = MaterialTheme.colorScheme.primary
+    val colorSecondary = MaterialTheme.colorScheme.secondary
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.size(radius * 2f)
     ) {
         Canvas(modifier = Modifier.size(radius * 2f), onDraw = {
+            val startAngleRadians = (-90f * (PI / 180f)).toFloat() // -90 graus em radianos
+            val progressAngleRadians = (360f * percentage * (PI / 180f)).toFloat() // conversão do ângulo de progresso para radianos
+
+            val gradientLength = 0.8f // 80% da extensão do progresso
+            val startX = (size.width / 2 + (size.width / 2) * cos(startAngleRadians + progressAngleRadians * gradientLength))
+            val startY = (size.height / 2 + (size.height / 2) * sin(startAngleRadians + progressAngleRadians * gradientLength))
+
+            val endX = (size.width / 2)
+            val endY = (size.height / 2)
+
+            val gradientColor = Brush.linearGradient(
+                colors = listOf(
+                    colorPrimary,
+                    colorSecondary
+                ),
+                start = Offset(startX, startY),
+                end = Offset(endX, endY)
+            )
+
             drawArc(
-                color = color,
+                brush = gradientColor,
                 startAngle = -90f,
                 sweepAngle = 360 * percentage,
                 useCenter = false,

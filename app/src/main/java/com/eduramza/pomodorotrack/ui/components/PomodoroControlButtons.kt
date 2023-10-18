@@ -1,6 +1,7 @@
 package com.eduramza.pomodorotrack.ui.components
 
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.eduramza.pomodorotrack.R
@@ -28,6 +31,12 @@ fun PomodoroControlButtons(
     context: Context
 ) {
     val pomodoroState = viewModel.state.collectAsState().value
+    val gradient = Brush.linearGradient(
+        colors = listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+        )
+    )
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -38,8 +47,8 @@ fun PomodoroControlButtons(
             Button(
                 onClick = viewModel::resetTimer,
                 shape = CircleShape,
-                modifier = Modifier.size(80.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                modifier = Modifier.size(80.dp).background(gradient, CircleShape),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
             ) {
                 Box(modifier = Modifier.defaultMinSize(32.dp)) {
                     Icon(
@@ -56,7 +65,8 @@ fun PomodoroControlButtons(
                 viewModel.controlCountdownTimer(context)
             },
             shape = CircleShape,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(100.dp).background(gradient, CircleShape),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
         ) {
             Icon(
                 painter = painterResource(id = pomodoroState.controlButton.icon),
@@ -69,7 +79,8 @@ fun PomodoroControlButtons(
             Button(
                 onClick = viewModel::setNextCycle,
                 shape = CircleShape,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(80.dp).background(gradient, CircleShape),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
             ) {
                 Box(modifier = Modifier.defaultMinSize(32.dp)) {
                     Icon(
