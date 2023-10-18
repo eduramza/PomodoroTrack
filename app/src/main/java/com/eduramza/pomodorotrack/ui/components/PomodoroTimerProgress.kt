@@ -29,8 +29,8 @@ import kotlin.math.sin
 @Composable
 fun PomodoroTimerProgress(
     viewModel: CountdownTimerViewModel,
-    fontSize: TextUnit = 48.sp,
-    radius: Dp = 100.dp,
+    fontSize: TextUnit = 64.sp,
+    radius: Dp = 120.dp,
     strokeWidth: Dp = 16.dp
 ) {
     val state = viewModel.state.collectAsState().value

@@ -2,6 +2,7 @@ package com.eduramza.pomodorotrack.ui.components
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -40,57 +42,62 @@ fun PomodoroControlButtons(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (pomodoroState.timerRunning) {
-            Button(
-                onClick = viewModel::resetTimer,
-                shape = CircleShape,
-                modifier = Modifier.size(80.dp).background(gradient, CircleShape),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
-            ) {
-                Box(modifier = Modifier.defaultMinSize(32.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(gradient)
+                        .padding(12.dp)
+                        .clickable { viewModel.resetTimer() },
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_replay),
                         contentDescription = "Previous Cycle",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
-            }
         } else {
-            Spacer(modifier = Modifier.size(80.dp))
+            Spacer(modifier = Modifier.size(48.dp))
         }
-        Button(
-            onClick = {
-                viewModel.controlCountdownTimer(context)
-            },
-            shape = CircleShape,
-            modifier = Modifier.size(100.dp).background(gradient, CircleShape),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        Box(
+            modifier = Modifier
+                .size(64.dp)
+                .clip(CircleShape)
+                .background(gradient)
+                .padding(16.dp)
+                .clickable { viewModel.controlCountdownTimer(context) }
         ) {
             Icon(
                 painter = painterResource(id = pomodoroState.controlButton.icon),
                 contentDescription = pomodoroState.controlButton.contentDescription,
+                tint = Color.White,
                 modifier = Modifier.size(32.dp)
             )
         }
 
         if (pomodoroState.timerRunning) {
-            Button(
-                onClick = viewModel::setNextCycle,
-                shape = CircleShape,
-                modifier = Modifier.size(80.dp).background(gradient, CircleShape),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
-            ) {
-                Box(modifier = Modifier.defaultMinSize(32.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(gradient)
+                        .padding(12.dp)
+                        .clickable { viewModel.setNextCycle() }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_skip_next),
                         contentDescription = "Skip Cycle",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
-            }
         } else {
-            Spacer(modifier = Modifier.size(80.dp))
+            Spacer(modifier = Modifier.size(48.dp))
         }
     }
 }

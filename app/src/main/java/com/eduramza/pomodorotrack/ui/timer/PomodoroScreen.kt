@@ -44,7 +44,7 @@ fun PomodoroScreen(
             // Exibir o progresso do timer
             PomodoroTimerProgress(viewModel = viewModel)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Text(text = "Pomodoros Completos #${viewModel.state.collectAsState().value.pomodoroCounter}")
 
             Spacer(modifier = Modifier.height(16.dp))
