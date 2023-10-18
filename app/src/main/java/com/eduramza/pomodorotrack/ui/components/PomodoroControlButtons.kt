@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -48,56 +45,56 @@ fun PomodoroControlButtons(
         if (pomodoroState.timerRunning) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(64.dp)
                         .clip(CircleShape)
                         .background(gradient)
-                        .padding(12.dp)
+                        .padding(16.dp)
                         .clickable { viewModel.resetTimer() },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_replay),
                         contentDescription = "Previous Cycle",
                         tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
         } else {
-            Spacer(modifier = Modifier.size(48.dp))
+            Spacer(modifier = Modifier.size(64.dp))
         }
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(80.dp)
                 .clip(CircleShape)
                 .background(gradient)
-                .padding(16.dp)
+                .padding(24.dp)
                 .clickable { viewModel.controlCountdownTimer(context) }
         ) {
             Icon(
                 painter = painterResource(id = pomodoroState.controlButton.icon),
                 contentDescription = pomodoroState.controlButton.contentDescription,
                 tint = Color.White,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(48.dp)
             )
         }
 
         if (pomodoroState.timerRunning) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(64.dp)
                         .clip(CircleShape)
                         .background(gradient)
-                        .padding(12.dp)
+                        .padding(16.dp)
                         .clickable { viewModel.setNextCycle() }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_skip_next),
                         contentDescription = "Skip Cycle",
                         tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
         } else {
-            Spacer(modifier = Modifier.size(48.dp))
+            Spacer(modifier = Modifier.size(64.dp))
         }
     }
 }

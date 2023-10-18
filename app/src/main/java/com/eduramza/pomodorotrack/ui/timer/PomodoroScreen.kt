@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,7 +46,10 @@ fun PomodoroScreen(
             PomodoroTimerProgress(viewModel = viewModel)
 
             Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "Pomodoros Completos #${viewModel.state.collectAsState().value.pomodoroCounter}")
+            Text(
+                text = "Pomodoros Completos #${viewModel.state.collectAsState().value.pomodoroCounter}",
+                color = MaterialTheme.colorScheme.onBackground,
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 

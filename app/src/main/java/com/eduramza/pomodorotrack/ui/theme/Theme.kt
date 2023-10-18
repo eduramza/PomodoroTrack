@@ -18,43 +18,49 @@ import androidx.core.view.WindowCompat
 import com.eduramza.pomodorotrack.domain.entity.PomodoroCycle
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = DarkPrimary,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = DarkSecondary,
+    background = DarkMidnightBackground,
+    onBackground = Color.White,
+    onSurface = Color.White,
 )
+
+//private val LightColorScheme = lightColorScheme(
+//    primary = Purple40,
+//    secondary = PurpleGrey40,
+//    tertiary = Pink40
+//
+//    /* Other default colors to override
+//    background = Color(0xFFFFFBFE),
+//    surface = Color(0xFFFFFBFE),
+//    onPrimary = Color.White,
+//    onSecondary = Color.White,
+//    onTertiary = Color.White,
+//    onBackground = Color(0xFF1C1B1F),
+//    onSurface = Color(0xFF1C1B1F),
+//    */
+//)
 
 private val PomodoroColorScheme = lightColorScheme(
-    primary = Color.Red,
-    secondary = Pink80,
-    surface = Color.Red,
+    primary = WorkCyclePrimary,
+    onPrimary = Color.Black,
+    secondary = WorkCycleSecondary,
+    onBackground = Color.Black,
 )
 
 private val ShortBreakColorScheme = lightColorScheme(
-    primary = Color.Green,
-    secondary = Pink80,
-    surface = Color.Green,
+    primary = ShortBreakPrimary,
+    onPrimary = Color.Black,
+    secondary = ShortBreakSecondary,
+    onBackground = Color.Black,
 )
 
 private val LongBreakColorScheme = lightColorScheme(
-    primary = Color.Blue,
-    secondary = Pink80,
-    surface = Color.Blue,
+    primary = LongBreakPrimary,
+    onPrimary = Color.Black,
+    secondary = LongBreakSecondary,
+    onBackground = Color.Black,
 )
 
 @Composable
@@ -71,7 +77,7 @@ fun AppTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> PomodoroColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -96,7 +102,7 @@ fun PomodoroAppTheme(
     content: @Composable () -> Unit
 ){
     val colorScheme = if (darkTheme){
-        dynamicDarkColorScheme(LocalContext.current)
+        DarkColorScheme
     } else {
         when(pomodoroCycle){
             PomodoroCycle.Pomodoro -> PomodoroColorScheme
